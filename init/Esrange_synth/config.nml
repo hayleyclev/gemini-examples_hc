@@ -1,0 +1,73 @@
+! Esrange simulation
+
+&base
+ymd = 2025,11,20               ! year, month, day
+UTsec0 = 82600.0              ! start time in UT seconds (5:00 UT, 6:00AM Esrange start)
+tdur = 900.0                  ! duration of simulation in seconds (12 hours, ends 17UT/24Esrange)
+dtout = 60.0                  ! how often to do file output (every 10 mins)
+activ = 110.0,110.0,40.0      ! f107a,f107,Ap
+tcfl = 0.9                    ! target cfl number
+Teinf = 1500.0                ! exospheric electron temperature
+/
+
+&flags
+potsolve = 1        ! solve electrodynamics:   0 - no; 1 - electrostatic; 2 - inductive
+flagperiodic = 0    ! whether periodic
+flagoutput = 1      ! 1 - full output
+/
+
+&setup
+dtheta=4 ! lat extent(ish)
+dphi=12 ! lon extent of new grid
+lp=192 ! no. pts in lat
+lq=256 ! no. pts in lon
+lphi=128 
+altmin=80e3
+glat=67.9
+glon=21.6
+gridflag=0
+! nmf=5e11
+! nme=2e11
+eqdir = '/Users/clevenger/Simulations/aurora_Esrange_11_20_eq/'
+! E0precip=2000           ! average energy
+! Qprecip=25              ! precip mW/m**2
+! Qprecip_background=0.5    ! background precipitation mW/m**2
+! precip_llon=256
+! precip_llat=256
+
+! Qprecip_function = "precip_SCW"
+
+Efield_latwidth=0.025
+Efield_lonwidth=0.025
+Jtarg=1.5e-6            ! current density A/m**2
+Efield_llat=256
+Efield_llon=256
+Jtarg_function = "fac_shear_synth"
+/
+
+! (optional - default off) Include disturbance precipitation based on file inputs
+! &precip
+! flagprecfile = 1                   ! use precipitaiton file input:  0 - no; 1 - yes
+! dtprec = 1.0                       ! time step between precipitation file inputs
+! precdir = '/Users/clevenger/Projects/gemini-examples/init/aurora_Esrange_11_20/'
+! /
+
+! Conductance input for no prec input
+! (optional - default off) Controlling background precipitation characteristics
+&precip_BG
+PhiWBG=5                   ! total energy flux (mW/m^2)
+W0BG=2e3                      ! characteristic energy (eV)
+/
+
+! (optional - default off) Include electric field boundary condition inputs from a file
+&efield
+! flagE0file = 1                     ! use electric field boundary condition file input:  0 - no; 1 - yes
+dtE0 = 10.0                         ! time step between electric field file inputs
+E0_dir = '/Users/clevenger/Simulations/Esrange_synth/inputs/efield/'
+/
+
+&files
+indat_size = 'inputs/simsize.h5'
+indat_grid = 'inputs/simgrid.h5'
+indat_file = 'inputs/initial_conditions.h5'
+/

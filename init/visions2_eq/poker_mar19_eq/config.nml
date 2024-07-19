@@ -1,0 +1,38 @@
+! SWARM over Poker mar19 eq simulation
+
+&base
+ymd = 2023,3,19               ! year, month, day
+UTsec0 = 25200.0              ! start time in UT seconds (7UT)
+tdur = 39600.0                  ! duration of simulation in seconds (11 hours - until 18UT)
+dtout = 600.0                  ! how often to do file output (every 10 mins)
+activ = 146.0,182.0,18.0      ! f107a,f107,Ap
+tcfl = 0.9                    ! target cfl number
+Teinf = 1500.0                ! exospheric electron temperature
+/
+
+&flags
+potsolve = 0        ! solve electrodynamics:   0 - no; 1 - electrostatic; 2 - inductive
+flagperiodic = 0    ! whether periodic
+flagoutput = 1      ! 1 - full output
+/
+
+&setup
+dtheta=5
+dphi=35
+lp=96
+lq=128
+lphi=32
+altmin=80e3
+glat=65
+glon=-147
+gridflag=0
+
+nmf=5e11
+nme=2e11
+/
+
+&files
+indat_size = 'inputs/simsize.h5'
+indat_grid = 'inputs/simgrid.h5'
+indat_file = 'inputs/initial_conditions.h5'
+/
