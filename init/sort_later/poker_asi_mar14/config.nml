@@ -1,0 +1,73 @@
+! PFRR Mar 14, 2023 SoP Simulation W/ LOMPE AND ASI MAPS
+
+&base
+ymd = 2023,3,14               ! year, month, day
+UTsec0 = 24600.0              ! start time in UT seconds (10:30 UT)
+tdur = 6400.0                  ! duration of simulation in seconds (1hr 30m, until 12:00UT)
+dtout = 60.0                  ! how often to do file output (every minute)
+activ = 183.0,149.0,18.0      ! f107a,f107,Ap
+tcfl = 0.9                    ! target cfl number
+Teinf = 1500.0                ! exospheric electron temperature
+/
+
+&flags
+potsolve = 1        ! solve electrodynamics:   0 - no; 1 - electrostatic; 2 - inductive
+flagperiodic = 0    ! whether periodic
+flagoutput = 1      ! 1 - full output
+/
+
+&setup
+dtheta=4 ! lat extent(ish)
+dphi=20 ! lon extent of new grid
+lp=128 ! no. pts in lat
+lq=192 ! no. pts in lon
+lphi=96 
+altmin=80e3
+glat=65
+glon=-147
+gridflag=0
+! nmf=5e11
+! nme=2e11
+eqdir = '/Users/clevenger/Simulations/poker_mar14_eq/'
+E0precip=2000           ! average energy
+Qprecip=25              ! precip mW/m**2
+Qprecip_background=0.5    ! background precipitation mW/m**2
+precip_llon=131
+precip_llat=68
+
+Qprecip_function = "lompe_precip"
+
+Efield_latwidth=0.025
+Efield_lonwidth=0.025
+Jtarg=1.5e-6            ! current density A/m**2
+Efield_llat=256
+Efield_llon=256
+Jtarg_function = "lompe_fac"
+/
+
+! (optional - default off) Include disturbance precipitation based on file inputs
+&precip
+! flagprecfile = 1                   ! use precipitaiton file input:  0 - no; 1 - yes
+dtprec = 10.0                       ! time step between precipitation file inputs
+prec_dir = '/Users/clevenger/Simulations/poker_asi_mar14/inputs/precipitation/'
+/
+
+! Conductance input for no prec input
+! (optional - default off) Controlling background precipitation characteristics
+&precip_BG
+PhiWBG=5                   ! total energy flux (mW/m^2)
+W0BG=2e3                      ! characteristic energy (eV)
+/
+
+! (optional - default off) Include electric field boundary condition inputs from a file
+&efield
+! flagE0file = 1                     ! use electric field boundary condition file input:  0 - no; 1 - yes
+dtE0 = 10.0                         ! time step between electric field file inputs
+E0_dir = '/Users/clevenger/Simulations/poker_asi_mar14/inputs/efield/'
+/
+
+&files
+indat_size = 'inputs/simsize.h5'
+indat_grid = 'inputs/simgrid.h5'
+indat_file = 'inputs/initial_conditions.h5'
+/
